@@ -15,7 +15,7 @@ datasets:
     n_workers: 8 # idk what this does
     batch_size: 128 # This leads to ~16GB of vram usage on my 3090.
     mode: paired_voice_audio
-    path: ../../dataset/train.txt
+    path: /content/drive/MyDrive/dataset/wav_split/train.txt
     fetcher_mode: ['lj'] # CHANGEME if your dataset isn't in LJSpeech format
     phase: train
     max_wav_length: 255995
@@ -26,13 +26,13 @@ datasets:
     conditioning_length: 44000
     use_bpe_tokenizer: True
     load_aligned_codes: False
-    tokenizer_vocab: ../custom_language_tokenizer.json
+    tokenizer_vocab: /content/drive/MyDrive/dataset/tokenizer.json
   val:
     name: val_dataset
     n_workers: 1
     batch_size: 64 # this could be higher probably
     mode: paired_voice_audio
-    path: ../../dataset/val.txt
+    path: /content/drive/MyDrive/dataset/wav_split/val.txt
     fetcher_mode: ['lj']
     phase: val # might be broken idk
     max_wav_length: 255995
@@ -43,7 +43,8 @@ datasets:
     conditioning_length: 44000
     use_bpe_tokenizer: True
     load_aligned_codes: False
-    tokenizer_vocab: ../custom_language_tokenizer.json
+    tokenizer_vocab: /content/drive/MyDrive/dataset/tokenizer.json
+
 
 steps:        
   gpt_train:
@@ -65,20 +66,20 @@ steps:
     injectors:  # TODO: replace this entire sequence with the GptVoiceLatentInjector
       paired_to_mel:
         type: torch_mel_spectrogram
-        mel_norm_file: ../experiments/clips_mel_norms.pth
+        mel_norm_file: ./experiments/clips_mel_norms.pth
         in: wav
         out: paired_mel
       paired_cond_to_mel:
         type: for_each
         subtype: torch_mel_spectrogram
-        mel_norm_file: ../experiments/clips_mel_norms.pth
+        mel_norm_file: ./experiments/clips_mel_norms.pth
         in: conditioning
         out: paired_conditioning_mel
       to_codes:
         type: discrete_token
         in: paired_mel
         out: paired_mel_codes
-        dvae_config: "../experiments/train_diffusion_vocoder_22k_level.yml" # EXTREMELY IMPORTANT
+        dvae_config: "./experiments/train_diffusion_vocoder_22k_level.yml" # EXTREMELY IMPORTANT
       paired_fwd_text:
         type: generator
         generator: gpt
@@ -119,13 +120,13 @@ networks:
       #only_alignment_head: False  # uv3/4
 
 path:
-  pretrain_model_gpt: '../experiments/autoregressive.pth' # CHANGEME: copy this from tortoise cache
+  pretrain_model_gpt: './experiments/autoregressive.pth' # CHANGEME: copy this from tortoise cache
   strict_load: true
   #resume_state: ../experiments/train_imgnet_vqvae_stage1/training_state/0.state   # <-- Set this to resume from a previous training state.
 
 # afaik all units here are measured in **steps** (i.e. one batch of batch_size is 1 unit)
 train: # CHANGEME: ALL OF THESE PARAMETERS SHOULD BE EXPERIMENTED WITH
-  niter: 50000
+  niter: 500
   warmup_iter: -1
   mega_batch_factor: 4    # <-- Gradient accumulation factor. If you are running OOM, increase this to [2,4,8].
   val_freq: 500 # TODO set this to epoch size * something
