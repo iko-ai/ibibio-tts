@@ -26,7 +26,7 @@ datasets:
     conditioning_length: 44000
     use_bpe_tokenizer: True
     load_aligned_codes: False
-    tokenizer_vocab: /content/drive/MyDrive/dataset/tokenizer.json
+    tokenizer_vocab: /content/custom_language_tokenizer.json
   val:
     name: val_dataset
     n_workers: 1
@@ -43,7 +43,7 @@ datasets:
     conditioning_length: 44000
     use_bpe_tokenizer: True
     load_aligned_codes: False
-    tokenizer_vocab: /content/drive/MyDrive/dataset/tokenizer.json
+    tokenizer_vocab: /content/custom_language_tokenizer.json
 
 
 steps:        
@@ -72,14 +72,14 @@ steps:
       paired_cond_to_mel:
         type: for_each
         subtype: torch_mel_spectrogram
-        mel_norm_file: ./experiments/clips_mel_norms.pth
+        mel_norm_file: /content/ibibio-tts/experiments/experiments/clips_mel_norms.pth
         in: conditioning
         out: paired_conditioning_mel
       to_codes:
         type: discrete_token
         in: paired_mel
         out: paired_mel_codes
-        dvae_config: "./experiments/train_diffusion_vocoder_22k_level.yml" # EXTREMELY IMPORTANT
+        dvae_config: "/content/ibibio-tts/experiments/experiments/train_diffusion_vocoder_22k_level.yml" # EXTREMELY IMPORTANT
       paired_fwd_text:
         type: generator
         generator: gpt
@@ -120,9 +120,9 @@ networks:
       #only_alignment_head: False  # uv3/4
 
 path:
-  pretrain_model_gpt: './experiments/autoregressive.pth' # CHANGEME: copy this from tortoise cache
+  pretrain_model_gpt: '/content/ibibio-tts/experiments/experiments/autoregressive.pth' # CHANGEME: copy this from tortoise cache
   strict_load: true
-  #resume_state: ../experiments/train_imgnet_vqvae_stage1/training_state/0.state   # <-- Set this to resume from a previous training state.
+  #resume_state: /content/ibibio-tts/experiments/experiments/train_imgnet_vqvae_stage1/training_state/0.state   # <-- Set this to resume from a previous training state.
 
 # afaik all units here are measured in **steps** (i.e. one batch of batch_size is 1 unit)
 train: # CHANGEME: ALL OF THESE PARAMETERS SHOULD BE EXPERIMENTED WITH
