@@ -6,8 +6,8 @@ start_step: 0 # -1 causes 0.pth to be saved!
 checkpointing_enabled: true  # <-- Gradient checkpointing. Enable for huge GPU memory savings. Disable for distributed training.
 fp16: false # TODO: why does enabling this with 8bit slow down perf??
 use_8bit: true
-wandb: false  # <-- enable to log to wandb. tensorboard logging is always enabled.
-use_tb_logger: true
+wandb: true  # <-- enable to log to wandb. tensorboard logging is always enabled.
+use_tb_logger: false
 
 datasets:
   train:

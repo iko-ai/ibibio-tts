@@ -15,6 +15,7 @@ orjson
 einops
 lambda-networks
 mup
+wandb
 
 #UI
 customtkinter
